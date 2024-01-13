@@ -47,7 +47,6 @@ def get_pull_requests_details(owner, repo, token):
             print(f'Created At: {pr["created_at"]}')
             print(f'Updated At: {pr["updated_at"]}')
             print(f'Closed At: {pr["closed_at"]}')
-            print(f'Merged At: {pr["merged_at"]}')
             print(f'State: {pr["state"]}')
     else:
         print(f'Error: Unable to fetch data from GitHub API. Status code: {response.status_code}')
