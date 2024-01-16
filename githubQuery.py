@@ -47,7 +47,7 @@ def get_pull_requests_details(owner, repo, token):
         closed_pr = 0
         merged_pr = 0 
         
-        # Looping through the json dict getting the desired fields
+        # Looping through the json object getting the desired fields
         for pr in sorted_pull_requests:
             print(f'\nPull Request #{pr["number"]}')
             print(f'Title: {pr["title"]}')
