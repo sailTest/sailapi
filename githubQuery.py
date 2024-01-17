@@ -12,21 +12,22 @@
 
 import requests
 from datetime import datetime, timedelta
-from sendinfo import emailCompose
+from sendComms import emailCompose
+from setUpVariables import owner, repo, token, time, fileNamePath
 
 # Function which queries github for pull requests 
 
-def get_pull_requests_details(owner, repo, token):
+def get_pull_requests_details(owner, repo, token, time):
     base_url = f'https://api.github.com/repos/{owner}/{repo}/pulls'
     headers = {'Authorization': f'token {token}'}
     
-    # Calculate the date one week ago
-    one_week_ago = (datetime.now() - timedelta(weeks=1)).isoformat()
+    # Calculate the date time weeks ago
+    number_of_week_ago = (datetime.now() - timedelta(weeks=time)).isoformat()
 
     # Define parameters for the GitHub API request
     params = {
         'state': 'all',
-        'since': one_week_ago,
+        'since': number_of_week_ago
     }
 
     # Fetch pull requests from the GitHub API
@@ -55,7 +56,7 @@ def messageFormater(sorted_pull_requests,owner,repo):
         merged_pr = 0 
         
         # File being created new, then info attached on it
-        attachMail = open("emailattachment.html","w")
+        attachMail = open(fileNamePath,"w")
 
         # Looping through the json dict getting the desired fields, and adding format to this file
         for i in range(len(sorted_pull_requests)):
@@ -75,9 +76,9 @@ def messageFormater(sorted_pull_requests,owner,repo):
 
         attachMail.close()
 
-        with open("emailattachment.html","r") as appndFile:
+        with open(fileNamePath,"r") as appndFile:
             save = appndFile.read()
-        with open("emailattachment.html","w") as appndFile:
+        with open(fileNamePath,"w") as appndFile:
             appndFile.write("\n")
             appndFile.write("<!DOCTYPE html> \n")
             appndFile.write("<html> \n")
@@ -111,14 +112,10 @@ def messageFormater(sorted_pull_requests,owner,repo):
             appndFile.write(save)
         appndFile.close()
         
-        emailCompose(f"Total number of PR, Open, Merged, Closed PR for {owner} / {repo}:","emailattachment.html")
+        emailCompose(f"Total number of PR, Open, Merged, Closed PR for {owner} / {repo}:",fileNamePath)
 
 
 if __name__ == '__main__':
-    # Replace these values with your GitHub repository information
-    owner = 'grafana'
-    repo = 'grafana'
-    # Replace 'your_token' with your GitHub personal access token
-    token = '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'
+    # All variables have been set on a configuration file. 
 
-    get_pull_requests_details(owner, repo, token)
+    get_pull_requests_details(owner, repo, token, time)
