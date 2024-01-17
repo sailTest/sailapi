@@ -8,14 +8,25 @@ Once the information has been correctly populated, the docker image can be creat
 
 The description of the files is as follow
 
+
+
 For Dockerfile creation:
+
+
 dependencies.txt - Has the additional python modules this application needs
 Dockerfile - The actual dockerfile which helps to contenarize this application 
 
 For handling the API request  and sending the email:
-githubQuery - python script which does the actual query, additional functions where set up inside to help format the file and printing in console 
+
+
+githubQuery - python script which does the actual query, additional functions where set up inside to help format the file and printing in console
+
+
 sendComms.py - python script which is in charge of sending emails 
-setUpVariable.py - a file where all variables must be declared, as best practive to minimize hardcoding 
+
+
+setUpVariable.py - a file where all variables must be declared, as best practive to minimize hardcoding
+
 
 Software requirements
 Requirements: python 3.11 or above and docker (podman could be used too)
