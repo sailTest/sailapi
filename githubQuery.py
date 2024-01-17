@@ -1,13 +1,13 @@
-####################################################################################
-#                                                                                  #
-# Author: Aldo Mestas                                                              #
-# Application to interact with Github API and obtain summary of all opened, closed, #
-# and in progress pull requests in the last week for a given repository and print  #
-# an email summary report that might be sent to a manager or Scrum-master.         #
-#                                                                                  #
-# January 2024                                                                     #
-#                                                                                  #
-####################################################################################
+#######################################################################################
+#                                                                                     #
+# Author: Aldo Mestas                                                                 #
+# Application to interact with Github API and obtain a summary of all opened, closed, #
+# and in progress pull requests in the last week for a given repository and print     #
+# an email summary report that might be sent to a manager or Scrum-master.            #
+#                                                                                     #
+# January 2024                                                                        #
+#                                                                                     #
+#######################################################################################
 
 
 import requests
@@ -115,19 +115,22 @@ def messageFormater(sorted_pull_requests,owner,repo):
             print("There is a problem creating/formatting the email file to be send, inspect the folder and ensure space/permissions are ok, quitting... ")
 
 def printMessageConsole():
-    # Print detailed information for each pull request
-    print(f'Subject: Detailed information for {owner} / {repo} pull requests in the last week:\n')
-    print(f"From:{sender_email}\n")
-    print(f"To:{receiver_email}\n")
-    print(f"Subject: Total number of PR, Open, Merged, Closed PR for {repo} repository\n")
-    print("email sent using MIME/UTF-8 and HTML file type")
-    print("Message: \n")
+    try: 
+      # Print detailed information for each pull request
+      print(f'Subject: Detailed information for {owner} / {repo} pull requests in the last week:\n')
+      print(f"From:{sender_email}\n")
+      print(f"To:{receiver_email}\n")
+      print(f"Subject: Total number of PR, Open, Merged, Closed PR for {repo} repository\n")
+      print("email sent using MIME/UTF-8 and HTML file type")
+      print("Message: \n")
 
-    with open(fileNamePath,"r") as showContent:
-            messageBody = showContent.read()
-            print(messageBody)
-    showContent.close()
-    print("EOM \n")
+      with open(fileNamePath,"r") as showContent:
+              messageBody = showContent.read()
+              print(messageBody)
+      showContent.close()
+      print("EOM \n")
+    except:
+        print("email file was not generated, cannot print the content of the message/repo, inspect permissions and values... quitting ")
 
 
 
