@@ -45,6 +45,5 @@ def emailCompose(subject,filename):
     with open(filename,"r") as attachinfo:
         message_bdy = attachinfo.read()
     attachinfo.close()
-
     sendEmail(senderEmail, receiverEmail, subject,message_bdy, smtpServer, smtpPort, smtpUsername, smtpPassword)
     

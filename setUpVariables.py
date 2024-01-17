@@ -11,7 +11,7 @@
 
 # For email script
 
-# All detailed significant information for email handling, smtp server could be different if needed, depending on the email server of preference.
+# All detailed significant information for email handling, smtp server could be different if needed, depending on email server of preference.
 sender_email = "al_785@hotmail.com"
 receiver_email = "alden.97@gmail.com"
 smtp_server = "smtp-mail.outlook.com"

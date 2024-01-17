@@ -17,7 +17,7 @@ from setUpVariables import owner, repo, token, time, fileNamePath
 
 # Function which queries github for pull requests 
 
-def get_pull_requests_details(owner, repo, token, time):
+def getPullRequests_details(owner, repo, token, time):
     base_url = f'https://api.github.com/repos/{owner}/{repo}/pulls'
     headers = {'Authorization': f'token {token}'}
     
@@ -58,7 +58,7 @@ def messageFormater(sorted_pull_requests,owner,repo):
         # File being created new, then info attached on it
         attachMail = open(fileNamePath,"w")
 
-        # Looping through the json dict getting the desired fields, and adding format to this file
+        # Looping through the json object getting the desired fields, and adding format to this file
         for i in range(len(sorted_pull_requests)):
             attachMail.write("<tr> \n")
             attachMail.write("<td>" + str(sorted_pull_requests[i]["number"]) + "  "  + sorted_pull_requests[i]["title"] + "  " + sorted_pull_requests[i]["user"]["login"] + "  " +sorted_pull_requests[i]["state"] + "</td>" +"\n")
@@ -73,9 +73,9 @@ def messageFormater(sorted_pull_requests,owner,repo):
         attachMail.write("</table> \n")
         attachMail.write("</body> \n")
         attachMail.write("</html>")
-
         attachMail.close()
 
+        # Changing information display order, first the counting, then details, and formatting it as HTML
         with open(fileNamePath,"r") as appndFile:
             save = appndFile.read()
         with open(fileNamePath,"w") as appndFile:
@@ -118,4 +118,4 @@ def messageFormater(sorted_pull_requests,owner,repo):
 if __name__ == '__main__':
     # All variables have been set on a configuration file. 
 
-    get_pull_requests_details(owner, repo, token, time)
+    getPullRequests_details(owner, repo, token, time)
