@@ -12,6 +12,7 @@
 
 import requests
 from datetime import datetime, timedelta
+from sendinfo import emailCompose
 
 # Function which queries github for pull requests 
 
@@ -33,13 +34,19 @@ def get_pull_requests_details(owner, repo, token):
 
     # Check if the request was successful, then capture the data in json format
     if response.status_code == 200:
-        pull_requests = response.json()
+        pullRequests = response.json()
        
         # Sort pull requests by state (opened, in progress, closed)
-        sorted_pull_requests = sorted(pull_requests, key=lambda pr: pr['state'])
+        sortedPullRequests = sorted(pullRequests, key=lambda pr: pr['state'])
+        
+        # Function to format the file to be sent through email
+        messageFormater(sortedPullRequests,owner,repo)
+                       
+    else:
+        print(f'Error: Unable to fetch data from GitHub API. Status code: {response.status_code}')
 
-
-        # Print detailed information for each pull request
+def messageFormater(sorted_pull_requests,owner,repo):
+    # Print detailed information for each pull request
         print(f'Detailed information for {owner} / {repo} pull requests in the last week:')
         
         #Start the counting for PR's state at zero
@@ -47,36 +54,70 @@ def get_pull_requests_details(owner, repo, token):
         closed_pr = 0
         merged_pr = 0 
         
-        # Looping through the json object getting the desired fields
-        for pr in sorted_pull_requests:
-            print(f'\nPull Request #{pr["number"]}')
-            print(f'Title: {pr["title"]}')
-            print(f'Author: {pr["user"]["login"]}')
-            print(f'Created At: {pr["created_at"]}')
-            print(f'Updated At: {pr["updated_at"]}')
-            print(f'Closed At: {pr["closed_at"]}')
-            print(f'State: {pr["state"]}')  
+        # File being created new, then info attached on it
+        attachMail = open("emailattachment.html","w")
 
-            #Once this has been collected, it can be included on a dict for further usage      
-            if pr["state"] == "open":
+        # Looping through the json dict getting the desired fields, and adding format to this file
+        for i in range(len(sorted_pull_requests)):
+            attachMail.write("<tr> \n")
+            attachMail.write("<td>" + str(sorted_pull_requests[i]["number"]) + "  "  + sorted_pull_requests[i]["title"] + "  " + sorted_pull_requests[i]["user"]["login"] + "  " +sorted_pull_requests[i]["state"] + "</td>" +"\n")
+            attachMail.write("</tr> \n")
+            if sorted_pull_requests[i]["state"] == "open":
                 open_pr = open_pr + 1 
-            elif  pr["state"] == "closed":
+            elif  sorted_pull_requests[i]["state"] == "closed":
                 closed_pr = closed_pr + 1
-            elif pr["state"] == "merged":
+            elif sorted_pull_requests[i]["state"] == "merged":
                 merged_pr = merged_pr + 1
         
-        print(f"\n\nTotal number of PR, Open, Merged, Closed PR for {owner} / {repo}:\n")
-        print(f"Total number of PR: {len(sorted_pull_requests)}")
-        print(f"Open PR = {open_pr}")
-        print(f"Merged PR = {merged_pr}")
-        print(f"Closed PR = {closed_pr}")
-    else:
-        print(f'Error: Unable to fetch data from GitHub API. Status code: {response.status_code}')
+        attachMail.write("</table> \n")
+        attachMail.write("</body> \n")
+        attachMail.write("</html>")
+
+        attachMail.close()
+
+        with open("emailattachment.html","r") as appndFile:
+            save = appndFile.read()
+        with open("emailattachment.html","w") as appndFile:
+            appndFile.write("\n")
+            appndFile.write("<!DOCTYPE html> \n")
+            appndFile.write("<html> \n")
+            appndFile.write(f"<h1>Total number of PR, Open, Merged, Closed PR for {owner} / {repo}</h1> \n")
+            appndFile.write("<body> \n")
+            appndFile.write("<table> \n")
+            appndFile.write("<tr> \n")
+            appndFile.write(f"<td> Total number of PR: {len(sorted_pull_requests)} </td>\n")
+            appndFile.write("</tr> \n")
+            appndFile.write("<tr> \n")
+            appndFile.write(f"<td> Open PR = {open_pr} </td>\n")
+            appndFile.write("</tr> \n")
+            appndFile.write("<tr> \n")
+            appndFile.write(f"<td>Merged PR = {merged_pr} </td>\n")
+            appndFile.write("</tr> \n")
+            appndFile.write("<tr> \n")
+            appndFile.write(f"<td>Closed PR = {closed_pr} </td>\n")
+            appndFile.write("</tr> \n")
+            appndFile.write("</table> \n")
+            appndFile.write("\n\n")
+            appndFile.write("<h1>Detailed information about PRs is as follow: </h1>\n\n")
+            appndFile.write("<table> \n")
+            appndFile.write("<tr> \n")
+            appndFile.write("<th> PR Number </th>\n")
+            appndFile.write("<th> Title </th>\n")
+            appndFile.write("<th> Author </th>\n")
+            appndFile.write("<th> Status </th>\n")
+            appndFile.write("</tr> \n")
+            appndFile.write("</table> \n")
+            appndFile.write("<table> \n")
+            appndFile.write(save)
+        appndFile.close()
+        
+        emailCompose(f"Total number of PR, Open, Merged, Closed PR for {owner} / {repo}:","emailattachment.html")
+
 
 if __name__ == '__main__':
     # Replace these values with your GitHub repository information
-    owner = 'nodejs'
-    repo = 'node'
+    owner = 'grafana'
+    repo = 'grafana'
     # Replace 'your_token' with your GitHub personal access token
     token = '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'
 
