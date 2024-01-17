@@ -22,11 +22,11 @@ smtp_password = ""
 # For GitHub script
 
 # Repo owner and name
-owner = 'kubernetes'
-repo = 'kubernetes'
+owner = ''
+repo = ''
 # GitHub personal access token
 token = ''
 # Number of weeks
-time = 1
+time = 
 # Path where the file is going to be stored
-fileNamePath = "/tmp/emailattachment.html"
+fileNamePath = ""
