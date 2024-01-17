@@ -16,7 +16,7 @@ receiver_email = "alden.97@gmail.com"
 smtp_server = "smtp-mail.outlook.com"
 smtp_port = 587
 smtp_username = "al_785@hotmail.com"
-smtp_password = "(#t3chn01sl0v3)"
+smtp_password = ""
 
 # For GitHub script
 
