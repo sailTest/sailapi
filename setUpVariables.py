@@ -11,6 +11,7 @@
 
 # For email script
 
+# All detailed significant information for email handling, smtp server could be different if needed, depending on the email server of preference.
 sender_email = "al_785@hotmail.com"
 receiver_email = "alden.97@gmail.com"
 smtp_server = "smtp-mail.outlook.com"
@@ -20,10 +21,12 @@ smtp_password = ""
 
 # For GitHub script
 
+# Repo owner and name
 owner = 'kubernetes'
 repo = 'kubernetes'
-# Replace 'your_token' with your GitHub personal access token
+# GitHub personal access token
 token = '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'
 # Number of weeks
 time = 1
+# Path where the file is going to be stored
 fileNamePath = "/tmp/emailattachment.html"
