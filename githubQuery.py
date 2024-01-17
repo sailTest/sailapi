@@ -13,7 +13,7 @@
 import requests
 from datetime import datetime, timedelta
 from sendComms import emailCompose
-from setUpVariables import owner, repo, token, time, fileNamePath
+from setUpVariables import owner, repo, token, time, fileNamePath, sender_email, receiver_email
 
 # Function which queries github for pull requests 
 
@@ -46,10 +46,7 @@ def getPullRequests_details(owner, repo, token, time):
     else:
         print(f'Error: Unable to fetch data from GitHub API. Status code: {response.status_code}')
 
-def messageFormater(sorted_pull_requests,owner,repo):
-    # Print detailed information for each pull request
-        print(f'Detailed information for {owner} / {repo} pull requests in the last week:')
-        
+def messageFormater(sorted_pull_requests,owner,repo):        
         #Start the counting for PR's state at zero
         open_pr = 0 
         closed_pr = 0
@@ -114,8 +111,27 @@ def messageFormater(sorted_pull_requests,owner,repo):
         
         emailCompose(f"Total number of PR, Open, Merged, Closed PR for {owner} / {repo}:",fileNamePath)
 
+def printMessageConsole():
+    # Print detailed information for each pull request
+    print(f'Subject: Detailed information for {owner} / {repo} pull requests in the last week:\n')
+    print(f"From:{sender_email}\n")
+    print(f"To:{receiver_email}\n")
+    print(f"Subject: Total number of PR, Open, Merged, Closed PR for {owner} / {repo}:\n")
+    print("email sent using MIME/UTF-8 and HTML file type")
+    print("Message: \n")
+
+    with open(fileNamePath,"r") as showContent:
+            messageBody = showContent.read()
+            print(messageBody)
+    showContent.close()
+    print("EOM \n")
+
+
 
 if __name__ == '__main__':
     # All variables have been set on a configuration file. 
-
+    # Gathering the information from githup APIm once done internally calls for a function to format the output and calls for email send
     getPullRequests_details(owner, repo, token, time)
+
+    # Print email into the console
+    printMessageConsole()
