@@ -1,7 +1,7 @@
 ####################################################################################
 #                                                                                  #
 # Author: Aldo Mestas                                                              #
-# Application to interact with Github API and obtain ummary of all opened, closed, #
+# Application to interact with Github API and obtain summary of all opened, closed, #
 # and in progress pull requests in the last week for a given repository and print  #
 # an email summary report that might be sent to a manager or Scrum-master.         #
 #                                                                                  #
@@ -112,7 +112,7 @@ def messageFormater(sorted_pull_requests,owner,repo):
         
           emailCompose(f"Total number of PR, Open, Merged, Closed PR for {repo} repository",fileNamePath)
         except:
-            print("There is a problem creating/formating the email file to be send, inspect the folder and ensure space/permissions are ok, quiting... ")
+            print("There is a problem creating/formatting the email file to be send, inspect the folder and ensure space/permissions are ok, quitting... ")
 
 def printMessageConsole():
     # Print detailed information for each pull request
